@@ -1,0 +1,729 @@
+<?xml version="1.0"?>
+<!-- These are faqs used in our project-->
+<!-- It's a questions collection base on Amazon Echo 2nd edition on amazon.com -->
+<!-- Most of questions (0-49) are user asked questions by "most helpful", with minimal data cleaning. -->
+<!-- Some questions (50- ) are questions I made of, mostly basic information about Echo. -->
+<faqs>
+    <entry id="0">
+        <question>
+            Does it have a rechargeable battery inside?
+        </question>
+        <answer>
+            All Echo's are corded, not battery powered.
+        </answer>
+    </entry>
+
+    <entry id="1">
+        <question>
+            Can I use Alexa to make phone calls through my iPhone, or does it do it some other way?
+        </question>
+        <answer>
+            Yes. Amazon has setup it's own VOIP system, which is what makes the calls. It's completely free to call
+            anyone, you can just specify the phone number you want to call or say a name from your address book. It uses
+            the called I'd of our cellphone so that people see the call is from you. A good comparison would be Skype
+            calling.
+        </answer>
+    </entry>
+
+    <entry id="2">
+        <question>
+            Can I request any song to play?
+        </question>
+        <answer>
+            Echo Music: WiFi and an Amazon Account is required. It does not have to be a Prime account. The Echo's will
+            default to the free Amazon Music. In Alexa Setup, Skills listed that you can enable:
+
+            1. Amazon Music (free) default, auto enables
+            2. Prime Music (Prime Member) auto enables
+            3. Pandora (free, link your own account))
+            4. TuneIn (free)
+            5. iHeart (free)
+            6. Amazon Music Unlimited (subscription)
+            7. Spotify (subscription)
+            8. Sirius XM (subscription)
+
+            None of the enabled music Skills are required. TuneIn and iHeart will allow you to specify radio stations
+            when commanding Alexa, both real and fabricated. If you do nothing, you will still have Amazon Music for
+            free.
+        </answer>
+    </entry>
+
+    <entry id="3">
+        <question>
+            Can it play the music favorites I have in my iTunes account?
+        </question>
+        <answer>
+            You can. There is a skill you can enable called “my media” in the Alexa app. It allows you to basically link
+            your home media or iTunes account on your computer. Once that’s done, you just say, “Alexa open my media and
+            play The Beatles” for instance. It works great for me and we have Apple Music so there’s a lot of music.
+            Hope this helps.
+        </answer>
+    </entry>
+
+    <entry id="4">
+        <question>
+            Need your phone number to help set up alexa?
+        </question>
+        <answer>
+            You do not need a phone number to setup the Echo, but you do need a smart phone or tablet with cell service
+            to setup the calling service with drop in.
+        </answer>
+    </entry>
+
+    <entry id="5">
+        <question>
+            Is the only difference between echo and dot the speaker?
+        </question>
+        <answer>
+            Yes, that the only difference.
+        </answer>
+    </entry>
+
+    <entry id="6">
+        <question>
+            Do you have to have Amazon Prime?
+        </question>
+        <answer>
+            There seems to be some confusion about this. The answer depends on what you want your echo to do.
+            Most of its features don't require Amazon Prime at all. You just need a smartphone that can use the Alexa
+            app, a wifi connection, and an Amazon account.
+            Some features, however, do require Amazon Prime. These are things like Amazon Prime Music, which require
+            Prime, but can be accessed through other means than the echo.
+        </answer>
+    </entry>
+
+    <entry id="7">
+        <question>
+            What is a Zigbee hub?
+        </question>
+        <answer>
+            Zigbee is a wireless protocol used by many smart home products. The Hub acts like a middle man, allowing
+            your Zigbee smart home devices to talk to other devices like the Echo Plus. You can sort of think of it like
+            a translator that allows devices to communicate across platforms.
+        </answer>
+    </entry>
+
+    <entry id="8">
+        <question>
+            Does alexa listen in on my conversations since it's always connected to the web?
+        </question>
+        <answer>
+            No, the listening circuit is on the Echo device. When the device detects the wake work "Alexa" it begins
+            streaming your command to the Alexa Voice Service on the Amazon Cloud (web). It records your commands and
+            Alexa's response and saves them on your Amazon account. This helps Alexa "learn" your speech
+            characteristics. You can see (and play and delete) these recordings in the Alexa app. Not to worry. :)
+        </answer>
+    </entry>
+
+    <entry id="9">
+        <question>
+            Will it work with 220v electricity?
+        </question>
+        <answer>
+            Much like most electronics (cell phone, laptop, tablets, etc.), the included power supply is 110-240v and as
+            long as you have the proper adapter for the plug in your country of choice, it is fine. I can confirm this
+            as I just took my Alexa to the Philippines and did not need a transformer. I left her there with my son to
+            use in his condo.
+        </answer>
+    </entry>
+
+    <entry id="10">
+        <question>
+            Can be used internationally?
+        </question>
+        <answer>
+            You can use it wherever you have wifi access. But only a few languages are supported atm.
+        </answer>
+    </entry>
+
+    <entry id="11">
+        <question>
+            Does Alexa Echo require the regular use of a smartphone?
+        </question>
+        <answer>
+            For the first time how do I set up my alexa.
+        </answer>
+    </entry>
+
+    <entry id="12">
+        <question>
+            Whats the difference between this and the plus?
+        </question>
+        <answer>
+            The primary functional differences are that that the Plus includes a Zigbee Hub and has a larger tweeter.
+            Physically, the Plus is similar to the 1st Generation Echo in size, shape and overall look and doesn't have
+            interchangeable outer shells.
+        </answer>
+    </entry>
+
+    <entry id="13">
+        <question>
+            Can I use echo to type a book manuscript?
+        </question>
+        <answer>
+            No
+        </answer>
+    </entry>
+
+    <entry id="14">
+        <question>
+            Does Echo have FM radio?
+        </question>
+        <answer>
+            Yes, you can stream both AM and FM radio stations.
+        </answer>
+    </entry>
+
+    <entry id="15">
+        <question>
+            Can I buy it here and use it in a another country like Israel?
+        </question>
+        <answer>
+            As long as you have wireless internet and you download the Alexa app on your portable device i.e. phone,
+            tablet then you should be fine. My only concern would be how it connects to electric, as the device itself
+            is not electric. I know outlets in Germany are much different than the U.S. so make sure you look that up
+            and get what you need for converting to their outlets before you go.
+        </answer>
+    </entry>
+
+    <entry id="16">
+        <question>
+            Does it stream Siriusxm?
+        </question>
+        <answer>
+            Yes.
+        </answer>
+    </entry>
+
+    <entry id="17">
+        <question>
+            When I am not home, can I send a message to the echo from my cellphone and have it tell my wife, "I'm
+            calling you, go find your cell phone."?
+        </question>
+        <answer>
+            Yes this has been very useful for that reason. You can also just call the device from your iPhone app and if
+            wife says "Alexa answer" you can talk over the speaker..... and help her work out work out where she left
+            her phone this time!!
+        </answer>
+    </entry>
+
+    <entry id="18">
+        <question>
+            If I have alexa app from 1st generation echo do I need to download app again to set up 2nd generation?
+        </question>
+        <answer>
+            Are you referring to the phone app or to an Alexa "skill?" The phone app is simply the Alexa app and is the
+            same no matter which Echo device(s) you own or what generation they are. As for the Alexa skills, once
+            enabled they will work with any Echo device (though of course you'll need an Echo Show or Echo Spot to get
+            full functionality from any skills that utilize a screen).
+
+            The great thing about Alexa skills is that they run on Amazon's cloud, not your actual Echo device. So as
+            Amazon adds skills to Alexa they automatically become available to you, and as skills themselves get updated
+            you will automatically be running the most up-to-date version.
+        </answer>
+    </entry>
+
+    <entry id="19">
+        <question>
+            How do I install it?
+        </question>
+        <answer>
+            You plug it in to the wall, download the Alexa app and through the app you connect it to your Wi-Fi. Pretty
+            easy.
+        </answer>
+    </entry>
+
+    <entry id="20">
+        <question>
+            I don't have have Wi-Fi?
+        </question>
+        <answer>
+            If you have a modem you can add a decent WiFi router for about $17. Then you'll have WiFi. (Check the Tenda
+            router if interested.)
+        </answer>
+    </entry>
+
+    <entry id="21">
+        <question>
+            So, an echo still requires to pay $3.99 month to play amazon music unlimited?
+        </question>
+        <answer>
+            I was not aware of that...will check it out...thanks.
+        </answer>
+    </entry>
+
+    <entry id="22">
+        <question>
+            Can Alexa work with 220 volts?
+        </question>
+        <answer>
+            The Echo only plugs into 110 V, the Eco Dot plugs into the computer/laptop USB
+        </answer>
+    </entry>
+
+    <entry id="23">
+        <question>
+            My new 2nd generation Echo does not have voice recognition available through the app on my iPad, why?
+        </question>
+        <answer>
+            Pretty sure the Voice Profile can only be set up on a smartphone.
+        </answer>
+    </entry>
+
+    <entry id="24">
+        <question>
+            Can you simplify commands - example: "alexa, play wcco radio". versus "alexa, play 8.30 wcco am radio
+            through InTune"?
+        </question>
+        <answer>
+            Is there only one radio station in Waco? Probably not. I find that after giving Alexa a detailed command
+            (wordy) for a while it seems to "learn" keywords and I can shorten the command significantly. So maybe after
+            giving the longer command a few times you can say "Alexa, play MY Waco radio". Alexa does involve AI.
+        </answer>
+    </entry>
+
+    <entry id="25">
+        <question>
+            Can the material skin of the new generation 2 Echo be removed? Is there the traditional black plastic cover
+            beneath that?
+        </question>
+        <answer>
+            Yes, you can remove the cover, which Amazon calls a "shell", for cleaning or to change it out for another
+            one.
+        </answer>
+    </entry>
+
+    <entry id="26">
+        <question>
+            I need to reset mine because it will not connect to wifi. there is no reset button and i’ve tried holding
+            down the microphone and volume down button.
+        </question>
+        <answer>
+            I disconnect the plug from my Echo devices when they lose wifi; doing that resets them. I forgot the proper
+            way to reset but when I originally tried that, it didn't work. So, unplugging echo connection Cord (attached
+            to echo) and then plugging back in is what works for me. Unplugging the electric connect from the outlet and
+            then plugging back in might work too.
+        </answer>
+    </entry>
+
+    <entry id="27">
+        <question>
+            will Echo control any smart TV?
+        </question>
+        <answer>
+            Broadlink makes a device they call the Black Bean. It can be added as a skill to the Echo and will act as a
+            smart remote. It emits 360deg IR, and can learn from most remotes. This will not work if you device uses an
+            RF connection, but very few do, so should not be an issue.
+        </answer>
+    </entry>
+
+    <entry id="28">
+        <question>
+            Is echo portable?
+        </question>
+        <answer>
+            I have moved it from an upstairs room to down stairs. That is all.
+        </answer>
+    </entry>
+
+    <entry id="29">
+        <question>
+            Can the echo pair with more than one pair of Bluetooth speakers?
+        </question>
+        <answer>
+            That’s a good question and I’m going to give you a half answer. I’m pretty sure only one Bluetooth at a
+            time, HOWEVER, you can join multiple echoes, dots, shows , etc to create a GROUP that plays the same thing
+            simultaneously wherever they are on your home network. Understand one thing important!!: if you have a
+            Bluetooth speaker with a device that is part of that group, using the group will kick the Bluetooth speaker
+            off. Only the Amazon products connect to each other and play simultaneously. Good luck!
+        </answer>
+    </entry>
+
+    <entry id="30">
+        <question>
+            Can I use this like an alarm clock where I can tell it to come on and play a preset fm station to wake me up
+            in the morning?
+        </question>
+        <answer>
+            It is easy to do. Ask Alexa to wake you at a certain time and in my case I just gave her a time and she
+            responded with is that morning or afternoon. I responded with AM and at the designated time I got a musical
+            note arrangement. Kinda neat. However I have not asked for a particular song to play.
+        </answer>
+    </entry>
+
+    <entry id="31">
+        <question>
+            How do I connect lights to the Echo?
+        </question>
+        <answer>
+            You need to have one of the following: Alexa-compatible Smart bulb, Alexa-compatible Smart plug, or
+            Alexa-compatible Smart switch.
+        </answer>
+    </entry>
+
+    <entry id="32">
+        <question>
+            what is the major difference between amazon echo (2nd gen) and Echo Plus?
+        </question>
+        <answer>
+            is there a cost to just listen to music
+        </answer>
+    </entry>
+
+    <entry id="33">
+        <question>
+            If we install the landlines option will we "still have to have" a smartphone with cell service to setup
+            calling with drop in to function properly?
+        </question>
+        <answer>
+            Can Echo connect to Bose speaker? (as an Echo Dot can do)
+        </answer>
+    </entry>
+
+    <entry id="34">
+        <question>
+            can you Bluetooth echo to your wifi?
+        </question>
+        <answer>
+            You can but not with the group function, whole house needs to hard wired.
+        </answer>
+    </entry>
+
+    <entry id="35">
+        <question>
+            Tell me about the connection to an external amplifier. What's required both ends?
+        </question>
+        <answer>
+            You can connect via Bluetooth or with a cable by the 3.5mm stereo jack on the Echo. If you plan to leave it
+            connected you might consider the less expensive Dot which is identical to the Echo except for size. So, on
+            the Echo/Dot side, Bluetooth or 3.5mm plug. On the amp/receiver/external speaker side, whatever connection
+            is compatible. Most have an "aux in" which is usually 3.5mm also. Sometimes RCA plugs (yellow and white.)
+        </answer>
+    </entry>
+
+    <entry id="36">
+        <question>
+            What is the warranty on the echo 2nd generation? I ordered from Amazon.
+        </question>
+        <answer>
+            The Echo comes with a 1-year limited warranty and service included. Optional 1-year, 2-year, and
+            3-year extended warranty available for U.S. Customers sold separately.
+        </answer>
+    </entry>
+
+    <entry id="37">
+        <question>
+            If I have two Echos in same room for added sound will they both respond and play music in sync ?
+        </question>
+        <answer>
+            No. All Echo devices use what Amazon calls "Echo Spatial Perception" which is a fancy way to say that if
+            more than one Echo device hears your request, they can work out which device is the closest to you and only
+            that one will respond.
+        </answer>
+    </entry>
+
+    <entry id="38">
+        <question>
+            Can wife and me use Alexa?
+        </question>
+        <answer>
+            Yes, more than one person can use Alexa, there is even a voice recognition capability.
+        </answer>
+    </entry>
+
+    <entry id="39">
+        <question>
+            Is the power cord still black on the new color Echo 2's?
+        </question>
+        <answer>
+            yes, I have 2 of them and they both are black.
+        </answer>
+    </entry>
+
+    <entry id="40">
+        <question>
+            I run robust wi-fi security. The passcode is quite lengthy. Could this be an issue? Can't use nest w/o
+            shortening the code.
+        </question>
+        <answer>
+            I have a lengthy passcode as well and it worked just fine.
+        </answer>
+    </entry>
+
+    <entry id="41">
+        <question>
+            Will echo dot and echo work separately on same wi-fi? eg play different radio stations at the same time?
+        </question>
+        <answer>
+            Yes it will. Except that it will play Prime music on only one at a time. Pandora and iHeartRadio will play
+            on multiple Echo devices.
+        </answer>
+    </entry>
+
+    <entry id="42">
+        <question>
+            Does it speak Portuguese?
+        </question>
+        <answer>
+            Not yet, no. Current language options are English, German and Japanese.
+        </answer>
+    </entry>
+
+    <entry id="43">
+        <question>
+            Why does it say the alexa network is unsecured
+        </question>
+        <answer>
+            Not sure. Maybe your wifi connection is not password protected? Be sure you have a password. Other than
+            that, do not know what it means.
+        </answer>
+    </entry>
+
+    <entry id="44">
+        <question>
+            Can I unplug it and still listen to music?
+        </question>
+        <answer>
+            If you want to use without having to worry about having a plug handy, check out the Tap. You charge it on a
+            base and can then take it anywhere without worrying about a plug. I use mine all over the house and yard. It
+            now has voice control so you do not have to push the button to communicate.
+        </answer>
+    </entry>
+
+    <entry id="45">
+        <question>
+            I just opened the box for an echo ii, and there is no power cord. is it supposed to have one included?
+        </question>
+        <answer>
+            Yes, it is normally in a small potion of the black interior "package/box". I have purchased two Echos and
+            one Echo Dot and all three came with a power cord.
+        </answer>
+    </entry>
+
+    <entry id="46">
+        <question>
+            I do not own a smart phone but have a computer Windows 10. Can I use the echo with this?
+        </question>
+        <answer>
+            You can do the basic setup with a browser: http://alexa.amazon.com The smartphone app is necessary to enable
+            Alexa Calling features.
+        </answer>
+    </entry>
+
+    <entry id="47">
+        <question>
+            Is the wood better more durable than the cloth one?
+        </question>
+        <answer>
+            I like the the cloth version but depends on the taste I guess
+            To me it hides better the dirt and the material looks durable.
+        </answer>
+    </entry>
+
+    <entry id="48">
+        <question>
+            So will this stand on its own or do I need Alexa for it to work?
+        </question>
+        <answer>
+            You need Alexa, which is free.
+        </answer>
+    </entry>
+
+    <entry id="49">
+        <question>
+            How to check battery level?
+        </question>
+        <answer>
+            there are add on rechargeable bases.
+        </answer>
+    </entry>
+
+    <!-- Following are questions made up -->
+
+    <entry id="50">
+        <question>
+            What's the price? How much is it?
+        </question>
+        <answer>
+            It's $99.99. Buy 2 and save $30. Add 2 Echo (2nd Generation) devices to your cart and automatically receive
+            $30 off. Or 5 monthly payments of $20.00.
+        </answer>
+    </entry>
+
+    <entry id="51">
+        <question>
+            What are the color options?
+        </question>
+        <answer>
+            We have Charcoal Fabric, Heather Gray Fabric, Oak Finish, Sandstone Fabric, Walnut Finish.
+        </answer>
+    </entry>
+
+    <entry id="52">
+        <question>
+            What are the color options?
+        </question>
+        <answer>
+            We have Charcoal Fabric, Heather Gray Fabric, Oak Finish, Sandstone Fabric, Walnut Finish.
+        </answer>
+    </entry>
+
+    <entry id="53">
+        <question>
+            How to play music?
+        </question>
+        <answer>
+            The 2nd generation Echo has a 2.5” downward-firing woofer and 0.6” tweeter powered by Dolby to deliver crisp
+            vocals and dynamic bass throughout the room. You can play music from Amazon Music, Spotify, Pandora,
+            iHeartRadio, TuneIn, and more. With Amazon Music, you can search by lyrics, time-period, or let Alexa pick
+            the music for you. Set a music alarm to wake up to your favorite song or playlist. You can also listen to
+            audiobooks from Audible, podcasts, radio stations, news briefs, and more.
+        </answer>
+    </entry>
+
+    <entry id="54">
+        <question>
+            If I have more than one Echo, how to play music in different rooms?
+        </question>
+        <answer>
+            Want to play music on an Echo in another room? Now with multi-room music, you can tell Alexa to play across
+            your compatible Echo devices. Tell Alexa to play jazz in the kitchen, top pop in the family room, or play
+            the same song throughout your whole home.
+        </answer>
+    </entry>
+
+    <entry id="55">
+        <question>
+            How to control home devices like light or TV?
+        </question>
+        <answer>
+            Use Echo to switch on the lamp before getting out of bed, turn on the coffee maker on your way to the
+            kitchen, or dim the lights from the couch to watch a movie—all without lifting a finger. Ask Alexa to turn
+            on the TV, turn up the volume, change the channel, or play your favorite movie. Echo can control your Amazon
+            Fire TV and select devices from Sony, Dish, and Logitech.
+
+            Control multiple devices at scheduled times or with a single voice command, like locking the doors and
+            turning off the lights when you go to bed. Echo works with lights, locks, switches, thermostats, and more
+            from WeMo, Philips Hue, SmartThings, Insteon, Nest, ecobee, and Wink.
+        </answer>
+    </entry>
+
+    <entry id="56">
+        <question>
+            How to talk or message to people with Echo?
+        </question>
+        <answer>
+            With Echo, you can talk to almost anyone hands-free—no tapping or searching required. Use the Drop In
+            feature when you want to connect instantly with compatible Echo devices in your home. For example, you can
+            ask someone for help with a chore, or remind the kids to go to sleep—without having to raise your voice.
+            With Alexa Announcements you can also use Echo to broadcast a quick, one-way message to all other Echo
+            devices in your home.
+
+            Making calls with Alexa is easy. Your contacts will see your number when they receive the call so they know
+            who is calling. Set up your voice profile and teach Alexa to recognize your voice. When you say, “Alexa,
+            call Mom”, Alexa will call your mom, even if you have multiple users in your home. Additionally, you can
+            send messages via voice or text to anyone with a supported Echo device or the Alexa App.
+        </answer>
+    </entry>
+
+    <entry id="57">
+        <question>
+            How can it recognize my voice? How to use it?
+        </question>
+        <answer>
+            Tucked under the light ring is an array of seven microphones that use beamforming technology and enhanced
+            noise cancellation. The 2nd generation Echo has improved wake-word performance to hear you ask a question
+            from any direction—even in noisy environments or while playing music at loud volumes.
+
+            When you want to use Echo, simply say the wake word, “Alexa,” and Echo lights up and connects to the cloud,
+            where the Alexa Voice Service recognizes and responds to your request instantly. Learn more about voice
+            recognition on Echo.
+        </answer>
+    </entry>
+
+    <entry id="58">
+        <question>
+            What else can it do?
+        </question>
+        <answer>
+            Echo uses tens of thousands of skills and counting. Skills add even more capabilities like ordering a pizza
+            from Domino's, requesting a ride from Uber, tracking your fitness with Fitbit, controlling your TV with
+            Dish, and more. To enable new skills, just ask Alexa.
+
+            New skills are being added all the time. You can also see ratings and reviews to learn what other customers
+            are saying about the thousands of skills available in the Alexa App.
+        </answer>
+    </entry>
+
+    <entry id="59">
+        <question>
+            What's the difference between versions of Echo? Compare Echo devices.
+        </question>
+        <answer>
+            Besides price, for Echo Dot, Echo, Echo plus, the main difference is the speaker, and Echo plus has a
+            built-in hub for simple setup of compatible smart home devices. Echo Spot and Echo Show has screen,
+            difference is the size of screen.
+        </answer>
+    </entry>
+
+    <entry id="60">
+        <question>
+            What's the size and weight?
+        </question>
+        <answer>
+            Device size (actual size and weight may vary): 1.3" x 3.3" x 3.3", 5.7 oz. (32 mm x 84 mm x 84 mm, 163
+            grams)
+        </answer>
+    </entry>
+
+    <entry id="61">
+        <question>
+            What's the Wi-Fi hardware and connectivity?
+        </question>
+        <answer>
+            Dual-band Wi-Fi supports 802.11 a/b/g/n (2.4 and 5 GHz) networks. Does not support connecting to ad-hoc (or
+            peer-to-peer) Wi-Fi networks.
+        </answer>
+    </entry>
+
+    <entry id="62">
+        <question>
+            What's the Bluetooth hardware and connectivity?
+        </question>
+        <answer>
+            Advanced Audio Distribution Profile (A2DP) support for audio streaming from your mobile device to Echo or
+            from Echo to your Bluetooth speaker. Audio/Video Remote Control Profile (AVRCP) for voice control of
+            connected mobile devices. Hands-free voice control is not supported for Mac OS X devices. Bluetooth speakers
+            requiring PIN codes are not supported.
+        </answer>
+    </entry>
+
+    <entry id="63">
+        <question>
+            What's the audio specification?
+        </question>
+        <answer>
+            2.5” (63.5 mm) woofer and 0.6” (16 mm) tweeter.
+        </answer>
+    </entry>
+
+    <entry id="64">
+        <question>
+            How to find the Alexa App?
+        </question>
+        <answer>
+            The Alexa App is compatible with Fire OS, Android, and iOS devices. You can find it on App Store or Google
+            Play store.
+        </answer>
+    </entry>
+
+    <entry id="65">
+        <question>
+            How is the sound quality?
+        </question>
+        <answer>
+            This latest model is better sound quality than old versions.
+        </answer>
+    </entry>
+
+</faqs>
