@@ -1,8 +1,14 @@
 <?xml version="1.0"?>
-<!-- These are faqs used in our project-->
+<!-- Final Project - Natural Language Processing - S18 -->
+<!-- AXYZ group -->
+<!-- Xinyang Zhu / 2021409044 / XXZ170001 / xyzhu@utdallas.edu / (469)-974-7431 -->
+<!-- Alvin Zhang / YXZ165231 -->
+
+<!-- These are faqs used in our project -->
 <!-- It's a questions collection base on Amazon Echo 2nd edition on amazon.com -->
 <!-- Most of questions (0-49) are user asked questions by "most helpful", with minimal data cleaning. -->
 <!-- Some questions (50- ) are questions I made of, mostly basic information about Echo. -->
+
 <faqs>
     <entry id="0">
         <question>
