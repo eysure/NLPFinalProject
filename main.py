@@ -16,6 +16,7 @@ This is the main entrance of this project, contain main loop and UI
 import re                               # Regular Expression
 import xml.etree.ElementTree as ET      # XML Parser
 from collections import Counter         # List Counter
+from corpus import Corpus, Entry        # Our corpus model class
 from cosine import get_cosine           # For Task 2
 
 TOKENIZER = r"\d+\.\d+|'\w+|[\w\/\-]+"  # Tokenizer
@@ -38,12 +39,13 @@ except ET.ParseError:
           "Please check file integrity or re-download the project. "
           "Email to xyzhu@utdallas.edu if necessary.")
     exit(0)
-print("✌️ Read FAQs successfully.")
+print("✌️ Parse FAQ file successfully.")
 
-# Establish faq bag
-faq_bag = []
+# Establish corpus with faq bag
+corpus = []
 for faq in faqs:
-    faq_bag.append([re.findall(TOKENIZER, faq[0].text), re.findall(TOKENIZER, faq[1].text)])
+    corpus.append(Entry(faq[0].text, faq[1].text))
+print("✌️ Tokenize successfully.")
 
 # Listen user input
 while True:
@@ -55,36 +57,31 @@ while True:
     elif u_input == "show raw":
         ET.dump(faqs)
     elif u_input == "show":
-        for faq in faqs:
-            print(faq.attrib['id'])
-            print("\tQ: ", faq[0].text.strip())
-            print("\tA: ", faq[1].text.strip())
+        for faq in corpus:
+            print(corpus.index(faq))
+            faq.print()
     elif u_input == "show bag":
-        for faq_entry in faq_bag:
-            print("faq_bag", "["+str(faq_bag.index(faq_entry))+"]")
-            print("\t[0]:", faq_entry[0])
-            print("\t[1]:", faq_entry[1])
-            print()
-    elif u_input == "show bag counter":
-        for faq_entry in faq_bag:
-            print("faq_bag", "["+str(faq_bag.index(faq_entry))+"]")
-            print("\t[0]:", Counter(faq_entry[0]))
-            print("\t[1]:", Counter(faq_entry[1]))
-            print()
+        for faq in corpus:
+            print(corpus.index(faq))
+            faq.print_bag()
+    elif u_input == "show counter":
+        for faq in corpus:
+            print(corpus.index(faq))
+            faq.print_counter()
     else:
         input_bag = re.findall(TOKENIZER, u_input.lower())
+        counter_input = Counter(input_bag)
 
         # Task 2 - Use statistical method (cosine-similarity) to calculate similarity of  user input and every faqs
         cos_counter = {}
-        for faq_entry in faq_bag:
-            cos = get_cosine(Counter(input_bag), Counter(faq_entry[0]+faq_entry[1]))
-            cos_counter[faq_bag.index(faq_entry)] = cos
+        for faq in corpus:
+            cos = get_cosine(counter_input, faq.counter)
+            cos_counter[corpus.index(faq)] = cos
 
         show_count = 0
         for index in sorted(cos_counter, key=cos_counter.get, reverse=True):
             if cos_counter[index] > 0 and show_count < MAX_SHOW:
                 print("FAQ #", index, "\tSimilarity: ", cos_counter[index])
-                print("\tQ:", " ".join(faq_bag[index][0]))
-                print("\tA:", " ".join(faq_bag[index][1]))
+                corpus[index].print()
                 print()
                 show_count += 1
