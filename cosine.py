@@ -2,7 +2,7 @@
 Final Project - Natural Language Processing - S18
 AXYZ group
 Xinyang Zhu / 2021409044 / XXZ170001 / xyzhu@utdallas.edu / (469)-974-7431
-Alvin Zhang / YXZ165231
+Alvin Zhang / 2021352902 / YXZ165231 / yxz165231@utdallas.edu / (469)-500-2197
 
 This document is the property of Xinyang Zhu & Alvin Zhang
 This document may not be reproduced or transmitted in any form,
