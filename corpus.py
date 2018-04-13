@@ -23,7 +23,6 @@ def data_cleaning(string):
     string = string.lower()
     return string
 
-
 # Class of entry of corpus
 class Entry:
     def __init__(self, str_q, str_a):
@@ -36,17 +35,17 @@ class Entry:
         self.bag = self.bag_q + self.bag_a
         self.counter = Counter(self.bag)
 
-    def print(self):
-        print("Q:", self.ori_str_q)
-        print("A:", self.ori_str_a)
+    def print_ori(self):
+        print ("Q: " + self.ori_str_q)
+        print ("A: " + self.ori_str_a)
 
     def print_bag(self):
-        print("Q:", self.bag_q)
-        print("A:", self.bag_a)
+        print "Q: ", self.bag_q
+        print "A: ", self.bag_a
 
     def print_counter(self):
-        print("Q:", self.counter_q)
-        print("A:", self.counter_a)
+        print "Q: ", self.counter_q
+        print "A: ", self.counter_a
 
     def concat(self):
         return self.bag_q+self.bag_a

@@ -14,6 +14,7 @@ This is the main entrance of this project, contain main loop and UI
 """
 
 import re                               # Regular Expression
+import os
 import xml.etree.ElementTree as ET      # XML Parser
 from collections import Counter         # List Counter
 from corpus import Corpus, Entry        # Our corpus model class
@@ -29,11 +30,11 @@ faq_tree, faqs = None, None
 try:
     faq_tree = ET.parse('FAQs.xml')
     faqs = faq_tree.getroot()
-except FileNotFoundError:
-    print("😰 Sorry, cannot find FAQ file, "
-          "please put 'FAQs.xml' file at the same dir as this python file and try again. "
-          "Email to xyzhu@utdallas.edu if necessary.")
-    exit(0)
+# except FileNotFoundError:
+#     print("😰 Sorry, cannot find FAQ file, "
+#           "please put 'FAQs.xml' file at the same dir as this python file and try again. "
+#           "Email to xyzhu@utdallas.edu if necessary.")
+#     exit(0)
 except ET.ParseError:
     print("😰 Sorry, we find this 'FAQs.xml' cannot be parsed properly. "
           "Please check file integrity or re-download the project. "
@@ -49,8 +50,7 @@ print("✌️ Tokenize successfully.")
 
 # Listen user input
 while True:
-    u_input = input("Please input your question (Input \"help\" to see manual):\n")
-
+    u_input = raw_input("Please input your question (Input \"help\" to see manual):\n")
     # input & help & debug
     if u_input == "help":
         print("Manual: ")
@@ -59,7 +59,7 @@ while True:
     elif u_input == "show":
         for faq in corpus:
             print(corpus.index(faq))
-            faq.print()
+            faq.print_ori()
     elif u_input == "show bag":
         for faq in corpus:
             print(corpus.index(faq))
@@ -79,9 +79,10 @@ while True:
             cos_counter[corpus.index(faq)] = cos
 
         show_count = 0
+        print ("Top 10 FAQ: \n")
         for index in sorted(cos_counter, key=cos_counter.get, reverse=True):
             if cos_counter[index] > 0 and show_count < MAX_SHOW:
-                print("FAQ #", index, "\tSimilarity: ", cos_counter[index])
-                corpus[index].print()
-                print()
+                print show_count+1, " FAQ: index: ", index, "\tSimilarity: ", cos_counter[index]
+                corpus[index].print_ori()
+                print("\n")
                 show_count += 1
