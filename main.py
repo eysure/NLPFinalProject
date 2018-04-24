@@ -13,18 +13,38 @@ main.py
 This is the main entrance of this project, contain main loop and UI
 """
 
-import re                               # Regular Expression
 import xml.etree.ElementTree as ET      # XML Parser
-from collections import Counter         # List Counter
-from corpus import Corpus, Entry        # Our corpus model class
-from cosine import get_cosine           # For Task 2
+from corpus import FAQ                # Our corpus model class
+from collections import Counter                     # Count the bag of words
+from cosine import get_cosine                       # Get the cos similarity
+import nltk                                         # NLTK - For downloading only
+from nltk.corpus import stopwords                   # NLTK - Use to identify stop words
+from nltk.tokenize import sent_tokenize             # NLTK - Use to tokenize text to sentences
+from nltk.tokenize import word_tokenize             # NLTK - Use to tokenize text to words
+# from nltk.stem.porter import PorterStemmer        # NLTK - A type of Stemmer
+from nltk.stem.lancaster import LancasterStemmer    # NLTK - A type of Stemmer (Selected)
+# from nltk.stem import SnowballStemmer             # NLTK - A type of Stemmer
+from nltk.stem import WordNetLemmatizer             # NLTK - WordNet Lemmatizer
+from nltk.corpus import wordnet as wn               # NLTK - WOrdNet interface
+from nltk.parse.stanford import StanfordParser      # Stanford - syntactic tree parser
 
-TOKENIZER = r"\d+\.\d+|'\w+|[\w\/\-]+"  # Tokenizer
+# NLTK data downloading
+nltk.download('averaged_perceptron_tagger')
+nltk.download('stopwords')
+nltk.download('punkt')
+
+# Tools implement
+stop_words = set(stopwords.words('english'))
+stemmer = LancasterStemmer()
+lemmatizer = WordNetLemmatizer()
+parser = StanfordParser('/Users/henry/stanfordNLP/stanford-parser-full-2018-02-27/stanford-parser.jar',
+                        '/Users/henry/stanfordNLP/stanford-english-corenlp-2018-02-27-models.jar')
+
 MAX_SHOW = 10                           # Amount of best result will be shown
 
 print("CS6320 Natural Language Processing Final Project by AXZY")
 
-# read corpus (FAQs)
+# Read corpus (FAQs)
 faq_tree, faqs = None, None
 try:
     faq_tree = ET.parse('FAQs.xml')
@@ -41,11 +61,13 @@ except ET.ParseError:
     exit(0)
 print("✌️ Parse FAQ file successfully.")
 
-# Establish corpus with faq bag
+# Establish corpus and extract features
+print("🤔️ Processing FAQ data...")
 corpus = []
 for faq in faqs:
-    corpus.append(Entry(faq[0].text, faq[1].text))
-print("✌️ Tokenize successfully.")
+    corpus.append(FAQ(faq[0].text, faq[1].text))
+    print(len(corpus), "\tProcessed.")
+print("✌️ FAQ data processed.")
 
 # Listen user input
 while True:
@@ -64,18 +86,72 @@ while True:
         for faq in corpus:
             print(corpus.index(faq))
             faq.print_bag()
-    elif u_input == "show counter":
+    elif u_input == "show features":
         for faq in corpus:
             print(corpus.index(faq))
-            faq.print_counter()
+            faq.print_all_features()
     else:
-        input_bag = re.findall(TOKENIZER, u_input.lower())
-        counter_input = Counter(input_bag)
+        # Input process
+
+        # Data Cleaning
+        input_str = u_input.strip()
+
+        # Tokenize
+        input_sents = sent_tokenize(input_str)
+        input_bag = word_tokenize(input_str)
+
+        # parse bag to counter
+        input_counter = Counter(input_bag)
+
+        # POS Tagging (As feature)
+        input_pos = nltk.pos_tag(input_bag)  # Tuple (word, POS)
+
+        # Remove stop words
+        input_sw_removed = [w for w in input_bag if w.lower() not in stop_words]
+
+        # Stem (As feature) & Lemmatize (As feature)
+        input_stemmed = []
+        input_lemmatized = []
+        for word in input_bag:
+            input_stemmed.append(stemmer.stem(word))
+            input_lemmatized.append(lemmatizer.lemmatize(word))
+
+        # Tree Parse (As feature)
+        input_tree = parser.raw_parse_sents(input_sents)
+
+        # WordNet hypernymns, hyponyms, meronyms, AND holonyms (As feature)
+        input_hypernymns = []
+        input_hyponyms = []
+        input_meronyms = []
+        input_holonyms = []
+        input_bag_counter = Counter(input_sw_removed)
+        for word in input_bag_counter.keys():
+            synsets = wn.synsets(word)
+            if synsets:
+                max_cos = 0.0
+                target_synset = None
+                for synset in synsets:
+                    definition = synset.definition()
+                    cos = get_cosine(Counter(input_bag), Counter(definition))
+                    if cos > max_cos:
+                        max_cos = cos
+                        target_synset = synset
+                if target_synset is None:
+                    target_synset = synsets[0]
+                if target_synset.hypernyms():
+                    input_hypernymns += target_synset.hypernyms()
+                if target_synset.hyponyms():
+                    input_hyponyms += target_synset.hyponyms()
+                if target_synset.part_meronyms():
+                    input_meronyms += target_synset.part_meronyms()
+                if target_synset.part_holonyms():
+                    input_holonyms += target_synset.part_holonyms()
 
         # Task 2 - Use statistical method (cosine-similarity) to calculate similarity of  user input and every faqs
+        print("\033[7mTask 2 result\033[0m")
         cos_counter = {}
         for faq in corpus:
-            cos = get_cosine(counter_input, faq.counter)
+            cos = get_cosine(input_counter, Counter(faq.bag_q+faq.bag_a))
             cos_counter[corpus.index(faq)] = cos
 
         show_count = 0

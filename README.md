@@ -10,7 +10,7 @@ Alvin Zhang / YXZ165231 <br />
 Generation)](https://www.amazon.com/dp/B06XXM5BPP). <br />
 - We extract and parse the top 50 [most helpful questions](https://www.amazon.com/ask/questions/asin/B06XXM5BPP), with
 minimal cleaning of typo and indent errors.
-- Then we add some "made up" questions just in case TA will ask about them :), index start from 50
+- Then we add some "made up" questions just in case TA will ask about them :), index start from 50.
 
 ## Task 2: Tokenize & Statistical matching algorithm
 - We load the FAQs.xml file, tokenize each faq question and answer by word, calculate the count of word, construct
