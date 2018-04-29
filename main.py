@@ -84,6 +84,8 @@ for faq in faqs:
 # faq = faqs[0]
 # current = FAQ(faq[0].text, faq[1].text, len(corpus))
 # trainData = trainData.append(current.trainData, ignore_index = True)
+
+trainData.to_csv('text.csv')
 valueClass = trainData['value']
 trainData = trainData.drop('value', axis=1)
 trainData['token'] = trainData['token'].astype(str).astype('category')
@@ -108,16 +110,14 @@ lgb_train = lgb.Dataset(X_tr, y_tr)
 lgb_val = lgb.Dataset(X_val, y_val)
 params = {
         'task': 'train',
-        'boosting_type': 'gbdt',
-        'objective': 'regression',
-        'metric': {'l2', 'auc'},
-        'num_leaves': 31,
-        'learning_rate': 0.05,
-        'feature_fraction': 0.9,
-        'bagging_fraction': 0.8,
-        'bagging_freq': 5,
-        'verbose': 0,
-        'min_data': 1
+        'application': 'multiclass',
+        'num_class': 66,
+        'boosting_type': 'dart',
+        'num_leaves': 50,
+        'learning_rate': 0.1,
+        'min_split_gain' :0.2,
+        'feature_fraction': 0.8,
+        'bagging_fraction': 0.8
     }
 
 lgbm_model = lgb.train(params, train_set = lgb_train, valid_sets = lgb_val, verbose_eval=5)
