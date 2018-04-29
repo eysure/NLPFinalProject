@@ -259,8 +259,8 @@ class FAQ:
         trainData_a = trainData_a.merge(stems_a, on ='token', how ='left')
         trainData_q = trainData_q.merge(synsets_q, on ='token', how ='left')
         trainData_a = trainData_a.merge(synsets_a, on ='token', how ='left')
-        self.trainData = trainData_q
-        # self.trainData = trainData_q.append(trainData_a, ignore_index = True)
+        # self.trainData = trainData_q
+        self.trainData = trainData_q.append(trainData_a, ignore_index = True)
         # self.trainData['token'] = self.trainData['token'].astype(str).astype('category')
         # self.trainData['wordTag'] = self.trainData['wordTag'].astype(str).astype('category')
         # self.trainData['stem'] = self.trainData['stem'].astype(str).astype('category')
