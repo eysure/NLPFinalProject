@@ -92,7 +92,6 @@ trainData = trainData.drop('value', axis=1)
 trainData['token'] = trainData['token'].astype(str).astype('category')
 trainData['wordTag'] = trainData['wordTag'].astype(str).astype('category')
 trainData['stem'] = trainData['stem'].astype(str).astype('category')
-trainData['parseTree'] = trainData['parseTree'].astype(str).astype('category')
 trainData['lemmas'] = trainData['lemmas'].astype(str).astype('category')
 trainData['hypernyms'] = trainData['hypernyms'].astype(str).astype('category')
 trainData['hyponyms'] = trainData['hyponyms'].astype(str).astype('category')
@@ -107,24 +106,24 @@ X_tr, X_val, y_tr, y_val = train_test_split(trainData, valueClass, test_size=0.2
 # clf = tree.DecisionTreeClassifier()
 # clf.fit(trainData, valueClass)
 
-# import lightgbm as lgb
-# lgb_train = lgb.Dataset(X_tr, y_tr)
-# lgb_val = lgb.Dataset(X_val, y_val)
-# params = {
-#         'task': 'train',
-#         'boosting_type': 'gbdt',
-#         'objective': 'regression',
-#         'metric': {'l2', 'auc'},
-#         'num_leaves': 100,
-#         'learning_rate': 0.05,
-#         'feature_fraction': 0.9,
-#         'bagging_fraction': 0.8,
-#         'bagging_freq': 5,
-#         'verbose': 0,
-#         'min_data': 1
-#     }
+import lightgbm as lgb
+lgb_train = lgb.Dataset(X_tr, y_tr)
+lgb_val = lgb.Dataset(X_val, y_val)
+params = {
+        'task': 'train',
+        'boosting_type': 'gbdt',
+        'objective': 'regression',
+        'metric': {'l2', 'auc'},
+        'num_leaves': 100,
+        'learning_rate': 0.05,
+        'feature_fraction': 0.9,
+        'bagging_fraction': 0.8,
+        'bagging_freq': 5,
+        'verbose': 0,
+        'min_data': 1
+    }
 
-# lgbm_model = lgb.train(params, train_set = lgb_train, valid_sets = lgb_val, verbose_eval=5)
+lgbm_model = lgb.train(params, train_set = lgb_train, valid_sets = lgb_val, verbose_eval=5)
 
 print("✌️ FAQ data processed.")
 
@@ -186,7 +185,6 @@ while True:
             trees.append(parse_tree_str)
         testData['token'] = tokens
         testData['wordTag'] = wordTags
-        testData['parseTree'] = trees
         # Remove stop words
         input_sw_removed = [w for w in input_bag if w.lower() not in stop_words]
 
@@ -277,7 +275,6 @@ while True:
         testData['wordTag'] = testData['wordTag'].astype(str).astype('category')
         testData['stem'] = testData['stem'].astype(str).astype('category')
         testData['lemmas'] = testData['lemmas'].astype(str).astype('category')
-        testData['parseTree'] = testData['parseTree'].astype(str).astype('category')
         testData['hypernyms'] = testData['hypernyms'].astype(str).astype('category')
         testData['hyponyms'] = testData['hyponyms'].astype(str).astype('category')
         testData['meronyms'] = testData['meronyms'].astype(str).astype('category')
@@ -383,7 +380,7 @@ while True:
         # print tag_counter_all
         # print stem_counter_all
         # print lemmatized_counter_all
-        test2 = pd.DataFrame()
+        task4 = pd.DataFrame()
         tokensArray = []
         tagArray = []
         stemArray = []
@@ -405,18 +402,18 @@ while True:
             meronymsArray.append(meronyms_counter_all[i])
             holonymsArray.append(holonyms_counter_all[i])
             totalArray.append(cos_sum_all[i])
-        test2['token'] = tokensArray
-        test2['tag'] = tagArray
-        test2['stem'] = stemArray
-        test2['lemmatized'] = lemmatizedArray
-        test2['parseTree'] = treeArray
-        test2['hypernymns'] = hypernymnsArray
-        test2['hyponyms'] = hyponymsArray
-        test2['meronyms'] = meronymsArray
-        test2['holonyms'] = holonymsArray
-        test2['sumAll'] = totalArray
+        task4['token'] = tokensArray
+        task4['tag'] = tagArray
+        task4['stem'] = stemArray
+        task4['lemmatized'] = lemmatizedArray
+        task4['parseTree'] = treeArray
+        task4['hypernymns'] = hypernymnsArray
+        task4['hyponyms'] = hyponymsArray
+        task4['meronyms'] = meronymsArray
+        task4['holonyms'] = holonymsArray
+        task4['sumAll'] = totalArray
 
-        test2.to_csv('test2.csv')
+        task4.to_csv('task4.csv')
         show_count = 0
         for index in sorted(cos_sum_all, key=cos_sum_all.get, reverse=True):
             if cos_sum_all[index] > 0 and show_count < MAX_SHOW:
@@ -424,17 +421,18 @@ while True:
                 corpus[index].print_all()
                 print()
                 show_count += 1
-        # result = lgbm_model.predict(testData)
-        # countR = Counter(result)
-        # maxValue = 0 
-        # maxIndex = 0
-        # print countR
-        # for index in countR.keys():
-        #     if countR[index] > maxValue:
-        #         maxValue = countR[index]
-        #         maxIndex = index
-        # maxIndex = round(maxIndex, 0)
-        # result = corpus[int(maxIndex)]
-        # print("FAQ #", maxIndex, "\tSimilarity: ", cos_counter[int(maxIndex)])
-        # result.print_all()
+        print("\033[7mLightGBM result\033[0m")
+        result = lgbm_model.predict(testData)
+        countR = Counter(result)
+        maxValue = 0 
+        maxIndex = 0
+        print countR
+        for index in countR.keys():
+            if countR[index] > maxValue:
+                maxValue = countR[index]
+                maxIndex = index
+        maxIndex = round(maxIndex, 0)
+        result = corpus[int(maxIndex)]
+        print("FAQ #", maxIndex, "\tSimilarity: ", cos_counter[int(maxIndex)])
+        result.print_all()
     
