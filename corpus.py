@@ -107,7 +107,7 @@ class FAQ:
         trainData_q['token'] = tokens_q
         trainData_q['wordTag'] = wordTags_q
         trainData_q['value'] = values_q
-        trainData_q['parseTree'] = trees_q
+        # trainData_q['parseTree'] = trees_q
         for tag in self.bag_a_pos:
             tokens_a.append(tag[0])
             wordTags_a.append(tag[1])
@@ -116,7 +116,7 @@ class FAQ:
         trainData_a['token'] = tokens_a
         trainData_a['wordTag'] = wordTags_a
         trainData_a['value'] = values_a
-        trainData_a['parseTree'] = trees_a
+        # trainData_a['parseTree'] = trees_a
         
         # Stem (As feature)
         self.bag_q_stemmed = []
