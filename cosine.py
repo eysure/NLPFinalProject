@@ -32,7 +32,10 @@ def get_cosine(vec1, vec2):
         return 0.0
     else:
         return float(numerator) / denominator
-
+def get_sum(vec1, vec2):
+    intersection = set(vec1.keys()) & set(vec2.keys())
+    sumAll = sum([vec1[x] + vec2[x] for x in intersection])
+    return sumAll
 
 def text_to_vector(text):
     words = WORD.findall(text)

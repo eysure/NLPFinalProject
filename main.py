@@ -17,6 +17,7 @@ import xml.etree.ElementTree as ET      # XML Parser
 from corpus import FAQ                # Our corpus model class
 from collections import Counter                     # Count the bag of words
 from cosine import get_cosine                       # Get the cos similarity
+from cosine import get_sum                          # Get the sum of two vector
 import nltk                                         # NLTK - For downloading only
 import numpy as np
 from nltk.corpus import stopwords                   # NLTK - Use to identify stop words
@@ -165,13 +166,13 @@ while True:
         # Tree Parse (As feature)
         input_tree = parser.raw_parse_sents(input_sents)
         input_parse_tree = []
-        for i in input_tree:
-            input_parse_tree += i
         parse_tree_str = ''
         for i in input_tree:
             for j in i:
                 parse_tree_str += str(j)
-
+                for s in str(j).split("\n"):
+                    input_parse_tree.append(s.strip()) 
+        print input_parse_tree
         # POS Tagging (As feature)
         testData = pd.DataFrame()
         input_pos = nltk.pos_tag(input_bag)  # Tuple (word, POS)
@@ -334,49 +335,49 @@ while True:
         tag_counter = Counter(input_pos)
         stem_counter = Counter(input_stemmed)
         lemmatized_counter = Counter(input_lemmatized)
-        # parseTree_counter = Counter(input_parse_tree)
+        parseTree_counter = Counter(input_parse_tree)
         hypernymns_counter = Counter(input_hypernymns)
         hyponyms_counter = Counter(input_hyponyms)
         meronyms_counter = Counter(input_meronyms)
         holonyms_counter = Counter(input_holonyms)
-
+        totalSum = 0
         for faq in corpus:
             # Tokens
-            token_cos = get_cosine(tokens_counter, Counter(faq.bag_q+faq.bag_a))
+            token_cos = get_sum(tokens_counter, Counter(faq.bag_q+faq.bag_a))
             tokens_counter_all[corpus.index(faq)] = token_cos
-            cos_sum_all[corpus.index(faq)] = token_cos
+            cos_sum_all[corpus.index(faq)] = 2 *token_cos
             # Tags
-            tag_cos = get_cosine(tag_counter, Counter(faq.bag_q_pos+faq.bag_a_pos))
+            tag_cos = get_sum(tag_counter, Counter(faq.bag_q_pos+faq.bag_a_pos))
             tag_counter_all[corpus.index(faq)] = tag_cos
-            cos_sum_all[corpus.index(faq)] += tag_cos
+            cos_sum_all[corpus.index(faq)] += 2 * tag_cos
             # Stem
-            stem_cos = get_cosine(stem_counter, Counter(faq.bag_q_stemmed+faq.bag_a_stemmed))
+            stem_cos = get_sum(stem_counter, Counter(faq.bag_q_stemmed + faq.bag_a_stemmed))
             stem_counter_all[corpus.index(faq)] = stem_cos
-            cos_sum_all[corpus.index(faq)] += stem_cos
+            cos_sum_all[corpus.index(faq)] += 4 * stem_cos
             # Lemmas
-            lemmatized_cos = get_cosine(lemmatized_counter, Counter(faq.bag_q_lemmatized+faq.bag_a_lemmatized))
+            lemmatized_cos = get_sum(lemmatized_counter, Counter(faq.bag_q_lemmatized+faq.bag_a_lemmatized))
             lemmatized_counter_all[corpus.index(faq)] = lemmatized_cos
-            cos_sum_all[corpus.index(faq)] += lemmatized_cos
+            cos_sum_all[corpus.index(faq)] += 5 * lemmatized_cos
             # Parse Tree
-            # tree_cos = get_cosine(parseTree_counter, Counter(faq.parse_tree_q+faq.parse_tree_a))
-            # parseTree_counter_all[corpus.index(faq)] = tree_cos
-            # cos_sum_all[corpus.index(faq)] += tree_cos
+            tree_cos = get_sum(parseTree_counter, Counter(faq.parse_tree_q))
+            parseTree_counter_all[corpus.index(faq)] = tree_cos
+            cos_sum_all[corpus.index(faq)] += tree_cos
             # Hypernymns
-            hypernymns_cos = get_cosine(hypernymns_counter, Counter(faq.hypernymns))
+            hypernymns_cos = get_sum(hypernymns_counter, Counter(faq.hypernymns))
             hypernymns_counter_all[corpus.index(faq)] = hypernymns_cos
-            cos_sum_all[corpus.index(faq)] += hypernymns_cos
+            cos_sum_all[corpus.index(faq)] += 1.5*hypernymns_cos
             # Hyponyms
-            hyponyms_cos = get_cosine(hyponyms_counter, Counter(faq.hyponyms))
+            hyponyms_cos = get_sum(hyponyms_counter, Counter(faq.hyponyms))
             hyponyms_counter_all[corpus.index(faq)] = hyponyms_cos
-            cos_sum_all[corpus.index(faq)] += hyponyms_cos
+            cos_sum_all[corpus.index(faq)] += 1.5*hyponyms_cos
             # Meronyms
-            meronyms_cos = get_cosine(meronyms_counter, Counter(faq.meronyms))
+            meronyms_cos = get_sum(meronyms_counter, Counter(faq.meronyms))
             meronyms_counter_all[corpus.index(faq)] = meronyms_cos
-            cos_sum_all[corpus.index(faq)] += meronyms_cos
+            cos_sum_all[corpus.index(faq)] += 1.5*meronyms_cos
             # Holonyms
-            holonyms_cos = get_cosine(holonyms_counter, Counter(faq.holonyms))
+            holonyms_cos = get_sum(holonyms_counter, Counter(faq.holonyms))
             holonyms_counter_all[corpus.index(faq)] = holonyms_cos
-            cos_sum_all[corpus.index(faq)] += holonyms_cos
+            cos_sum_all[corpus.index(faq)] += 1.5*holonyms_cos
 
         # print tokens_counter_all
         # print tag_counter_all
@@ -398,7 +399,7 @@ while True:
             tagArray.append(tag_counter_all[i])
             stemArray.append(stem_counter_all[i])
             lemmatizedArray.append(lemmatized_counter_all[i])
-            # treeArray.append(parseTree_counter_all[i])
+            treeArray.append(parseTree_counter_all[i])
             hypernymnsArray.append(hypernymns_counter_all[i])
             hyponymsArray.append(hyponyms_counter_all[i])
             meronymsArray.append(meronyms_counter_all[i])
@@ -408,7 +409,7 @@ while True:
         test2['tag'] = tagArray
         test2['stem'] = stemArray
         test2['lemmatized'] = lemmatizedArray
-        # test2['parseTree'] = treeArray
+        test2['parseTree'] = treeArray
         test2['hypernymns'] = hypernymnsArray
         test2['hyponyms'] = hyponymsArray
         test2['meronyms'] = meronymsArray
