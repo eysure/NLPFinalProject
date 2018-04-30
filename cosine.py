@@ -37,6 +37,11 @@ def get_sum(vec1, vec2):
     sumAll = sum([vec1[x] + vec2[x] for x in intersection])
     return sumAll
 
+def get_sum_all(vec1, vec2):
+    sumAll = sum([vec1[x] for x in vec1.keys()])
+    sumAll += sum([vec2[x] for x in vec1.keys()])
+    return sumAll
+
 def text_to_vector(text):
     words = WORD.findall(text)
     return Counter(words)

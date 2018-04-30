@@ -81,12 +81,12 @@ for faq in faqs:
     corpus.append(current)
     # print current.trainData
     trainData = trainData.append(current.trainData, ignore_index = True)
-    print(len(corpus), "\tProcessed.")
+    print("%s    Processed." %len(corpus))
 # faq = faqs[0]
 # current = FAQ(faq[0].text, faq[1].text, len(corpus))
 # trainData = trainData.append(current.trainData, ignore_index = True)
 
-# trainData.to_csv('text.csv')
+trainData.to_csv('trainData.csv')
 valueClass = trainData['value']
 trainData = trainData.drop('value', axis=1)
 trainData['token'] = trainData['token'].astype(str).astype('category')
@@ -171,7 +171,6 @@ while True:
                 parse_tree_str += str(j)
                 for s in str(j).split("\n"):
                     input_parse_tree.append(s.strip()) 
-        print input_parse_tree
         # POS Tagging (As feature)
         testData = pd.DataFrame()
         input_pos = nltk.pos_tag(input_bag)  # Tuple (word, POS)
@@ -289,9 +288,9 @@ while True:
         show_count = 0
         for index in sorted(cos_counter, key=cos_counter.get, reverse=True):
             if cos_counter[index] > 0 and show_count < MAX_SHOW:
-                print("FAQ #", index, "\tSimilarity: ", cos_counter[index])
+                print("FAQ #%s    Similarity: %s" %(index,cos_counter[index]))
                 corpus[index].print_all()
-                print()
+                print('\n')
                 show_count += 1
         # Task 3 - Print the 
         print "Result is: "
@@ -337,8 +336,9 @@ while True:
         hyponyms_counter = Counter(input_hyponyms)
         meronyms_counter = Counter(input_meronyms)
         holonyms_counter = Counter(input_holonyms)
-        totalSum = 0
+        
         for faq in corpus:
+            totalSum = 0
             # Tokens
             token_cos = get_sum(tokens_counter, Counter(faq.bag_q+faq.bag_a))
             tokens_counter_all[corpus.index(faq)] = token_cos
@@ -417,9 +417,9 @@ while True:
         show_count = 0
         for index in sorted(cos_sum_all, key=cos_sum_all.get, reverse=True):
             if cos_sum_all[index] > 0 and show_count < MAX_SHOW:
-                print("FAQ #", index, "\tSimilarity: ", cos_sum_all[index])
+                print("FAQ #%s    Similarity: %s" %(index,cos_sum_all[index]))
                 corpus[index].print_all()
-                print()
+                print('\n')
                 show_count += 1
         print("\033[7mLightGBM result\033[0m")
         result = lgbm_model.predict(testData)
@@ -433,6 +433,6 @@ while True:
                 maxIndex = index
         maxIndex = round(maxIndex, 0)
         result = corpus[int(maxIndex)]
-        print("FAQ #", maxIndex, "\tSimilarity: ", cos_counter[int(maxIndex)])
+        print("FAQ #%s    Similarity: %s" %(maxIndex,cos_counter[int(maxIndex)]))
         result.print_all()
     
