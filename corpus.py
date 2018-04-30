@@ -294,7 +294,6 @@ class FAQ:
     def print_all(self):
         print("Q:", self.str_q)
         print("A:", self.str_a)
-
     def print_bag(self):
         print("Q:", self.bag_q)
         print("A:", self.bag_a)
