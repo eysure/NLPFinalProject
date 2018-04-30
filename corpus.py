@@ -76,13 +76,16 @@ class FAQ:
         parse_tree_q_str = ''
         parse_tree_a_str = ''
         for i in raw_tree_q:
-            self.parse_tree_q += i
             for j in i:
                 parse_tree_q_str += str(j)
+                for s in str(j).split("\n"):
+                    self.parse_tree_q.append(s.strip())     
         for i in raw_tree_a:
-            self.parse_tree_a += i
             for j in i:
                 parse_tree_a_str += str(j)
+                for s in str(j).split("\n"):
+                    self.parse_tree_a.append(s.strip()) 
+        # print Counter(self.parse_tree_q + self.parse_tree_a)
          # Create dataframe to generate the train data
         self.trainData = pd.DataFrame()
         trainData_q = pd.DataFrame()
@@ -286,16 +289,7 @@ class FAQ:
         trainData_a = trainData_a.merge(stems_a, on ='token', how ='left')
         trainData_q = trainData_q.merge(synsets_q, on ='token', how ='left')
         trainData_a = trainData_a.merge(synsets_a, on ='token', how ='left')
-        # self.trainData = trainData_q
         self.trainData = trainData_q.append(trainData_a, ignore_index = True)
-        # self.trainData['token'] = self.trainData['token'].astype(str).astype('category')
-        # self.trainData['wordTag'] = self.trainData['wordTag'].astype(str).astype('category')
-        # self.trainData['stem'] = self.trainData['stem'].astype(str).astype('category')
-        # self.trainData['lemmas'] = self.trainData['lemmas'].astype(str).astype('category')
-        # self.trainData['hypernyms'] = self.trainData['hypernyms'].astype(str).astype('category')
-        # self.trainData['hyponyms'] = self.trainData['hyponyms'].astype(str).astype('category')
-        # self.trainData['meronyms'] = self.trainData['meronyms'].astype(str).astype('category')
-        # self.trainData['holonyms'] = self.trainData['holonyms'].astype(str).astype('category')
 
     def print_all(self):
         print("Q:", self.str_q)
