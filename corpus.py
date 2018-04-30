@@ -66,6 +66,23 @@ class FAQ:
         self.bag_q_pos = nltk.pos_tag(self.bag_q_sw_removed)     # Tuple (word, POS)
         self.bag_a_pos = nltk.pos_tag(self.bag_a_sw_removed)     # Tuple (word, POS)
         
+         # Tree Parse (As feature)
+        self.sent_q = sent_tokenize(self.str_q)
+        self.sent_a = sent_tokenize(self.str_a)
+        self.parse_tree_q = []
+        self.parse_tree_a = []
+        raw_tree_q = parser.raw_parse_sents(self.sent_q)
+        raw_tree_a = parser.raw_parse_sents(self.sent_a)
+        parse_tree_q_str = ''
+        parse_tree_a_str = ''
+        for i in raw_tree_q:
+            self.parse_tree_q += i
+            for j in i:
+                parse_tree_q_str += str(j)
+        for i in raw_tree_a:
+            self.parse_tree_a += i
+            for j in i:
+                parse_tree_a_str += str(j)
          # Create dataframe to generate the train data
         self.trainData = pd.DataFrame()
         trainData_q = pd.DataFrame()
@@ -74,23 +91,29 @@ class FAQ:
         tokens_q = []
         wordTags_q = []
         values_q = []
+        trees_q = []
         tokens_a = []
         wordTags_a = []
         values_a = []
+        trees_a = []
         for tag in self.bag_q_pos:
             tokens_q.append(tag[0])
             wordTags_q.append(tag[1])
             values_q.append(index)
+            trees_q.append(parse_tree_q_str)
         trainData_q['token'] = tokens_q
         trainData_q['wordTag'] = wordTags_q
         trainData_q['value'] = values_q
+        trainData_q['parseTree'] = trees_q
         for tag in self.bag_a_pos:
             tokens_a.append(tag[0])
             wordTags_a.append(tag[1])
             values_a.append(index)
+            trees_a.append(parse_tree_a_str)
         trainData_a['token'] = tokens_a
         trainData_a['wordTag'] = wordTags_a
         trainData_a['value'] = values_a
+        trainData_a['parseTree'] = trees_a
         
         # Stem (As feature)
         self.bag_q_stemmed = []
@@ -125,25 +148,29 @@ class FAQ:
         stems_a['stem'] = stemArray_a
         stems_a['lemmas'] = lemmatizes_a
             
-        # Tree Parse (As feature)
-        self.sent_q = sent_tokenize(self.str_q)
-        self.sent_a = sent_tokenize(self.str_a)
-        self.parse_tree_q = parser.raw_parse_sents(self.sent_q)
-        self.parse_tree_a = parser.raw_parse_sents(self.sent_a)
-
+        # # Tree Parse (As feature)
+        # self.sent_q = sent_tokenize(self.str_q)
+        # self.sent_a = sent_tokenize(self.str_a)
+        # self.parse_tree_q = parser.raw_parse_sents(self.sent_q)
+        # self.parse_tree_a = parser.raw_parse_sents(self.sent_a)
+        
         # WordNet hypernymns, hyponyms, meronyms, AND holonyms (As feature)
+        self.hypernymns = []
+        self.hyponyms = []
+        self.meronyms = [] 
+        self.holonyms = []
         synsets_q = pd.DataFrame()
         synsets_a = pd.DataFrame()
         synsets_q_word = []
         synsets_a_word = []
-        hypernymns_q = []
-        hyponyms_q = []
-        meronyms_q = []
-        holonyms_q = []
-        hypernymns_a = []
-        hyponyms_a = []
-        meronyms_a = []
-        holonyms_a = []
+        hypernymns_q_str = []
+        hyponyms_q_str = []
+        meronyms_q_str = []
+        holonyms_q_str = []
+        hypernymns_a_str = []
+        hyponyms_a_str = []
+        meronyms_a_str = []
+        holonyms_a_str = []
         self.bag_counter = Counter(self.bag_q_sw_removed) + Counter(self.bag_a_sw_removed)
         for word in self.bag_q_sw_removed:
             synsets_q_word.append(word)
@@ -164,39 +191,43 @@ class FAQ:
                 if target_synset is None:
                     target_synset = synsets[0]
                 if target_synset.hypernyms():
+                    self.hypernymns += target_synset.hypernyms()
                     for hypernym in target_synset.hypernyms():
                         syn_hypernyms += str(hypernym) + '|'
-                    hypernymns_q.append(syn_hypernyms)
+                    hypernymns_q_str.append(syn_hypernyms)
                 else:
-                    hypernymns_q.append('null')
+                    hypernymns_q_str.append('null')
                 if target_synset.hyponyms():
+                    self.hyponyms += target_synset.hyponyms()
                     for hyponym in target_synset.hyponyms():
                         syn_hyponyms += str(hyponym) + '|'
-                    hyponyms_q.append(syn_hyponyms)
+                    hyponyms_q_str.append(syn_hyponyms)
                 else:
-                    hyponyms_q.append('null')
+                    hyponyms_q_str.append('null')
                 if target_synset.part_meronyms():
+                    self.meronyms += target_synset.part_meronyms()
                     for meronym in target_synset.part_meronyms():
                         syn_meronyms += str(meronym) + '|'
-                    meronyms_q.append(syn_meronyms)
+                    meronyms_q_str.append(syn_meronyms)
                 else:
-                    meronyms_q.append('null')
+                    meronyms_q_str.append('null')
                 if target_synset.part_holonyms():
+                    self.holonyms += target_synset.part_holonyms()
                     for holonym in target_synset.part_holonyms():
                         syn_holonyms += str(holonym) + '|'
-                    holonyms_q.append(syn_holonyms)
+                    holonyms_q_str.append(syn_holonyms)
                 else:
-                    holonyms_q.append('null')
+                    holonyms_q_str.append('null')
             else:
-                hypernymns_q.append('null')
-                hyponyms_q.append('null')
-                meronyms_q.append('null')
-                holonyms_q.append('null')
+                hypernymns_q_str.append('null')
+                hyponyms_q_str.append('null')
+                meronyms_q_str.append('null')
+                holonyms_q_str.append('null')
         synsets_q['token'] = synsets_q_word
-        synsets_q['hypernyms'] = hypernymns_q
-        synsets_q['hyponyms'] = hyponyms_q
-        synsets_q['meronyms'] = meronyms_q
-        synsets_q['holonyms'] = holonyms_q
+        synsets_q['hypernyms'] = hypernymns_q_str
+        synsets_q['hyponyms'] = hyponyms_q_str
+        synsets_q['meronyms'] = meronyms_q_str
+        synsets_q['holonyms'] = holonyms_q_str
     
         for word in self.bag_a_sw_removed:
             synsets_a_word.append(word)
@@ -219,42 +250,38 @@ class FAQ:
                 if target_synset.hypernyms():
                     for hypernym in target_synset.hypernyms():
                         syn_hypernyms += str(hypernym) + '|'
-                    hypernymns_a.append(syn_hypernyms)
+                    hypernymns_a_str.append(syn_hypernyms)
                 else:
-                    hypernymns_a.append('null')
+                    hypernymns_a_str.append('null')
                 if target_synset.hyponyms():
                     for hyponym in target_synset.hyponyms():
                         syn_hyponyms += str(hyponym) + '|'
-                    hyponyms_a.append(syn_hyponyms)
+                    hyponyms_a_str.append(syn_hyponyms)
                 else:
-                    hyponyms_a.append('null')
+                    hyponyms_a_str.append('null')
                 if target_synset.part_meronyms():
                     for meronym in target_synset.part_meronyms():
                         syn_meronyms += str(meronym) + '|'
-                    meronyms_a.append(syn_meronyms)
+                    meronyms_a_str.append(syn_meronyms)
                 else:
-                    meronyms_a.append('null')
+                    meronyms_a_str.append('null')
                 if target_synset.part_holonyms():
                     for holonym in target_synset.part_holonyms():
                         syn_holonyms += str(holonym) + '|'
-                    holonyms_a.append(syn_holonyms)
+                    holonyms_a_str.append(syn_holonyms)
                 else:
-                    holonyms_a.append('null')
+                    holonyms_a_str.append('null')
             else:
-                hypernymns_a.append('null')
-                hyponyms_a.append('null')
-                meronyms_a.append('null')
-                holonyms_a.append('null')
+                hypernymns_a_str.append('null')
+                hyponyms_a_str.append('null')
+                meronyms_a_str.append('null')
+                holonyms_a_str.append('null')
         synsets_a['token'] = synsets_a_word
-        synsets_a['hypernyms'] = hypernymns_a
-        synsets_a['hyponyms'] = hyponyms_a
-        synsets_a['meronyms'] = meronyms_a
-        synsets_a['holonyms'] = holonyms_a
+        synsets_a['hypernyms'] = hypernymns_a_str
+        synsets_a['hyponyms'] = hyponyms_a_str
+        synsets_a['meronyms'] = meronyms_a_str
+        synsets_a['holonyms'] = holonyms_a_str
 
-        self.hypernymns = hypernymns_q + hypernymns_a
-        self.hyponyms = hyponyms_q + hyponyms_a
-        self.meronyms = meronyms_q + meronyms_a
-        self.holonyms = holonyms_q + holonyms_a
         trainData_q = trainData_q.merge(stems_q, on ='token', how ='left')
         trainData_a = trainData_a.merge(stems_a, on ='token', how ='left')
         trainData_q = trainData_q.merge(synsets_q, on ='token', how ='left')

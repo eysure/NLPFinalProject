@@ -85,12 +85,13 @@ for faq in faqs:
 # current = FAQ(faq[0].text, faq[1].text, len(corpus))
 # trainData = trainData.append(current.trainData, ignore_index = True)
 
-trainData.to_csv('text.csv')
+# trainData.to_csv('text.csv')
 valueClass = trainData['value']
 trainData = trainData.drop('value', axis=1)
 trainData['token'] = trainData['token'].astype(str).astype('category')
 trainData['wordTag'] = trainData['wordTag'].astype(str).astype('category')
 trainData['stem'] = trainData['stem'].astype(str).astype('category')
+trainData['parseTree'] = trainData['parseTree'].astype(str).astype('category')
 trainData['lemmas'] = trainData['lemmas'].astype(str).astype('category')
 trainData['hypernyms'] = trainData['hypernyms'].astype(str).astype('category')
 trainData['hyponyms'] = trainData['hyponyms'].astype(str).astype('category')
@@ -105,22 +106,24 @@ X_tr, X_val, y_tr, y_val = train_test_split(trainData, valueClass, test_size=0.2
 # clf = tree.DecisionTreeClassifier()
 # clf.fit(trainData, valueClass)
 
-import lightgbm as lgb
-lgb_train = lgb.Dataset(X_tr, y_tr)
-lgb_val = lgb.Dataset(X_val, y_val)
-params = {
-        'task': 'train',
-        'application': 'multiclass',
-        'num_class': 66,
-        'boosting_type': 'dart',
-        'num_leaves': 50,
-        'learning_rate': 0.1,
-        'min_split_gain' :0.2,
-        'feature_fraction': 0.8,
-        'bagging_fraction': 0.8
-    }
+# import lightgbm as lgb
+# lgb_train = lgb.Dataset(X_tr, y_tr)
+# lgb_val = lgb.Dataset(X_val, y_val)
+# params = {
+#         'task': 'train',
+#         'boosting_type': 'gbdt',
+#         'objective': 'regression',
+#         'metric': {'l2', 'auc'},
+#         'num_leaves': 100,
+#         'learning_rate': 0.05,
+#         'feature_fraction': 0.9,
+#         'bagging_fraction': 0.8,
+#         'bagging_freq': 5,
+#         'verbose': 0,
+#         'min_data': 1
+#     }
 
-lgbm_model = lgb.train(params, train_set = lgb_train, valid_sets = lgb_val, verbose_eval=5)
+# lgbm_model = lgb.train(params, train_set = lgb_train, valid_sets = lgb_val, verbose_eval=5)
 
 print("✌️ FAQ data processed.")
 
@@ -159,35 +162,45 @@ while True:
         # parse bag to counter
         input_counter = Counter(input_bag)
 
+        # Tree Parse (As feature)
+        input_tree = parser.raw_parse_sents(input_sents)
+        input_parse_tree = []
+        for i in input_tree:
+            input_parse_tree += i
+        parse_tree_str = ''
+        for i in input_tree:
+            for j in i:
+                parse_tree_str += str(j)
+
         # POS Tagging (As feature)
         testData = pd.DataFrame()
         input_pos = nltk.pos_tag(input_bag)  # Tuple (word, POS)
         tokens = []
         wordTags = []
         values = []
+        trees = []
         for tag in input_pos:
             tokens.append(tag[0])
             wordTags.append(tag[1])
+            trees.append(parse_tree_str)
         testData['token'] = tokens
         testData['wordTag'] = wordTags
+        testData['parseTree'] = trees
         # Remove stop words
         input_sw_removed = [w for w in input_bag if w.lower() not in stop_words]
 
         # Stem (As feature) & Lemmatize (As feature)
         stems = pd.DataFrame()
         stemWords = []
-        stemArray = []
-        lemmatizes = []
+        input_stemmed = []
+        input_lemmatized = []
         for word in input_sw_removed:
             stemWords.append(word)
-            stemArray.append(stemmer.stem(word))
-            lemmatizes.append(lemmatizer.lemmatize(word))
+            input_stemmed.append(stemmer.stem(word))
+            input_lemmatized.append(lemmatizer.lemmatize(word))
         stems['token'] = stemWords
-        stems['stem'] = stemArray
-        stems['lemmas'] = lemmatizes
-
-        # Tree Parse (As feature)
-        input_tree = parser.raw_parse_sents(input_sents)
+        stems['stem'] = input_stemmed
+        stems['lemmas'] = input_lemmatized
 
         # WordNet hypernymns, hyponyms, meronyms, AND holonyms (As feature)
         input_synsets = pd.DataFrame()
@@ -196,6 +209,10 @@ while True:
         input_hyponyms = []
         input_meronyms = []
         input_holonyms = []
+        input_hypernymns_str = []
+        input_hyponyms_str = []
+        input_meronyms_str = []
+        input_holonyms_str = []
         input_bag_counter = Counter(input_sw_removed)
         for word in input_bag_counter.keys():
             input_synsets_word.append(word)
@@ -216,39 +233,42 @@ while True:
                 if target_synset is None:
                     target_synset = synsets[0]
                 if target_synset.hypernyms():
+                    input_hypernymns += target_synset.hypernyms()
                     for hypernym in target_synset.hypernyms():
                         syn_hypernyms += str(hypernym) + '|'
-                    input_hypernymns.append(syn_hypernyms)
+                    input_hypernymns_str.append(syn_hypernyms)
                 else:
-                    input_hypernymns.append('null')
+                    input_hypernymns_str.append('null')
                 if target_synset.hyponyms():
+                    input_hyponyms += target_synset.hyponyms()
                     for hyponym in target_synset.hyponyms():
                         syn_hyponyms += str(hyponym) + '|'
-                    input_hyponyms.append(syn_hyponyms)
+                    input_hyponyms_str.append(syn_hyponyms)
                 else:
-                    input_hyponyms.append('null')
+                    input_hyponyms_str.append('null')
                 if target_synset.part_meronyms():
                     for meronym in target_synset.part_meronyms():
                         syn_meronyms += str(meronym) + '|'
-                    input_meronyms.append(syn_meronyms)
+                    input_meronyms_str.append(syn_meronyms)
                 else:
-                    input_meronyms.append('null')
+                    input_meronyms_str.append('null')
                 if target_synset.part_holonyms():
+                    input_holonyms += target_synset.part_holonyms()
                     for holonym in target_synset.part_holonyms():
                         syn_holonyms += str(holonym) + '|'
-                    input_holonyms.append(syn_holonyms)
+                    input_holonyms_str.append(syn_holonyms)
                 else:
-                    input_holonyms.append('null')
+                    input_holonyms_str.append('null')
             else:
-                input_hypernymns.append('null')
-                input_hyponyms.append('null')
-                input_meronyms.append('null')
-                input_holonyms.append('null')
+                input_hypernymns_str.append('null')
+                input_hyponyms_str.append('null')
+                input_meronyms_str.append('null')
+                input_holonyms_str.append('null')
         input_synsets['token'] = input_synsets_word
-        input_synsets['hypernyms'] = input_hypernymns
-        input_synsets['hyponyms'] = input_hyponyms
-        input_synsets['meronyms'] = input_meronyms
-        input_synsets['holonyms'] = input_holonyms
+        input_synsets['hypernyms'] = input_hypernymns_str
+        input_synsets['hyponyms'] = input_hyponyms_str
+        input_synsets['meronyms'] = input_meronyms_str
+        input_synsets['holonyms'] = input_holonyms_str
         testData = testData.merge(stems, on ='token', how ='left')
         testData = testData.merge(input_synsets, on ='token', how ='left')
         
@@ -256,6 +276,7 @@ while True:
         testData['wordTag'] = testData['wordTag'].astype(str).astype('category')
         testData['stem'] = testData['stem'].astype(str).astype('category')
         testData['lemmas'] = testData['lemmas'].astype(str).astype('category')
+        testData['parseTree'] = testData['parseTree'].astype(str).astype('category')
         testData['hypernyms'] = testData['hypernyms'].astype(str).astype('category')
         testData['hyponyms'] = testData['hyponyms'].astype(str).astype('category')
         testData['meronyms'] = testData['meronyms'].astype(str).astype('category')
@@ -274,18 +295,145 @@ while True:
                 corpus[index].print_all()
                 print()
                 show_count += 1
+        # Task 3 - Print the 
         print "Result is: "
-        result = lgbm_model.predict(testData)
-        countR = Counter(result)
-        maxValue = 0 
-        maxIndex = 0
-        print countR
-        for index in countR.keys():
-            if countR[index] > maxValue:
-                maxValue = countR[index]
-                maxIndex = index
-        maxIndex = round(maxIndex, 0)
-        result = corpus[int(maxIndex)]
-        print("FAQ #", maxIndex, "\tSimilarity: ", cos_counter[int(maxIndex)])
-        result.print_all()
+        print("\033[7mTask 3 result\033[0m")
+        print "Input Token is: "
+        print tokens
+        print "Input word tags is: "
+        print input_pos
+        print "Input stem is: "
+        print input_stemmed
+        print "Input lemmas is: "
+        print input_lemmatized
+        print "Input parse tree is: "
+        print parse_tree_str
+        print "Input hypernymns is: "
+        print input_hypernymns
+        print "Input hyponyms is: "
+        print input_hyponyms
+        print "Input meronyms is: "
+        print input_meronyms
+        print "Input holonyms is: "
+        print input_holonyms
+
+        # Task 4 - Use statistical method (cosine-similarity) to calculate similarity of  user input and every faqs
+        print("\033[7mTask 4 result\033[0m")
+        # tokenizer
+        tokens_counter_all = {}
+        tag_counter_all = {}
+        stem_counter_all = {}
+        lemmatized_counter_all = {}
+        parseTree_counter_all = {}
+        hypernymns_counter_all = {}
+        hyponyms_counter_all = {}
+        meronyms_counter_all = {}
+        holonyms_counter_all = {}
+        cos_sum_all = {}
+        tokens_counter = Counter(input_bag)
+        tag_counter = Counter(input_pos)
+        stem_counter = Counter(input_stemmed)
+        lemmatized_counter = Counter(input_lemmatized)
+        # parseTree_counter = Counter(input_parse_tree)
+        hypernymns_counter = Counter(input_hypernymns)
+        hyponyms_counter = Counter(input_hyponyms)
+        meronyms_counter = Counter(input_meronyms)
+        holonyms_counter = Counter(input_holonyms)
+
+        for faq in corpus:
+            # Tokens
+            token_cos = get_cosine(tokens_counter, Counter(faq.bag_q+faq.bag_a))
+            tokens_counter_all[corpus.index(faq)] = token_cos
+            cos_sum_all[corpus.index(faq)] = token_cos
+            # Tags
+            tag_cos = get_cosine(tag_counter, Counter(faq.bag_q_pos+faq.bag_a_pos))
+            tag_counter_all[corpus.index(faq)] = tag_cos
+            cos_sum_all[corpus.index(faq)] += tag_cos
+            # Stem
+            stem_cos = get_cosine(stem_counter, Counter(faq.bag_q_stemmed+faq.bag_a_stemmed))
+            stem_counter_all[corpus.index(faq)] = stem_cos
+            cos_sum_all[corpus.index(faq)] += stem_cos
+            # Lemmas
+            lemmatized_cos = get_cosine(lemmatized_counter, Counter(faq.bag_q_lemmatized+faq.bag_a_lemmatized))
+            lemmatized_counter_all[corpus.index(faq)] = lemmatized_cos
+            cos_sum_all[corpus.index(faq)] += lemmatized_cos
+            # Parse Tree
+            # tree_cos = get_cosine(parseTree_counter, Counter(faq.parse_tree_q+faq.parse_tree_a))
+            # parseTree_counter_all[corpus.index(faq)] = tree_cos
+            # cos_sum_all[corpus.index(faq)] += tree_cos
+            # Hypernymns
+            hypernymns_cos = get_cosine(hypernymns_counter, Counter(faq.hypernymns))
+            hypernymns_counter_all[corpus.index(faq)] = hypernymns_cos
+            cos_sum_all[corpus.index(faq)] += hypernymns_cos
+            # Hyponyms
+            hyponyms_cos = get_cosine(hyponyms_counter, Counter(faq.hyponyms))
+            hyponyms_counter_all[corpus.index(faq)] = hyponyms_cos
+            cos_sum_all[corpus.index(faq)] += hyponyms_cos
+            # Meronyms
+            meronyms_cos = get_cosine(meronyms_counter, Counter(faq.meronyms))
+            meronyms_counter_all[corpus.index(faq)] = meronyms_cos
+            cos_sum_all[corpus.index(faq)] += meronyms_cos
+            # Holonyms
+            holonyms_cos = get_cosine(holonyms_counter, Counter(faq.holonyms))
+            holonyms_counter_all[corpus.index(faq)] = holonyms_cos
+            cos_sum_all[corpus.index(faq)] += holonyms_cos
+
+        # print tokens_counter_all
+        # print tag_counter_all
+        # print stem_counter_all
+        # print lemmatized_counter_all
+        test2 = pd.DataFrame()
+        tokensArray = []
+        tagArray = []
+        stemArray = []
+        lemmatizedArray = []
+        treeArray = []
+        hypernymnsArray = []
+        hyponymsArray = []
+        meronymsArray = []
+        holonymsArray = []
+        totalArray = []
+        for i in tokens_counter_all.keys():
+            tokensArray.append(tokens_counter_all[i])
+            tagArray.append(tag_counter_all[i])
+            stemArray.append(stem_counter_all[i])
+            lemmatizedArray.append(lemmatized_counter_all[i])
+            # treeArray.append(parseTree_counter_all[i])
+            hypernymnsArray.append(hypernymns_counter_all[i])
+            hyponymsArray.append(hyponyms_counter_all[i])
+            meronymsArray.append(meronyms_counter_all[i])
+            holonymsArray.append(holonyms_counter_all[i])
+            totalArray.append(cos_sum_all[i])
+        test2['token'] = tokensArray
+        test2['tag'] = tagArray
+        test2['stem'] = stemArray
+        test2['lemmatized'] = lemmatizedArray
+        # test2['parseTree'] = treeArray
+        test2['hypernymns'] = hypernymnsArray
+        test2['hyponyms'] = hyponymsArray
+        test2['meronyms'] = meronymsArray
+        test2['holonyms'] = holonymsArray
+        test2['sumAll'] = totalArray
+
+        test2.to_csv('test2.csv')
+        show_count = 0
+        for index in sorted(cos_sum_all, key=cos_sum_all.get, reverse=True):
+            if cos_sum_all[index] > 0 and show_count < MAX_SHOW:
+                print("FAQ #", index, "\tSimilarity: ", cos_sum_all[index])
+                corpus[index].print_all()
+                print()
+                show_count += 1
+        # result = lgbm_model.predict(testData)
+        # countR = Counter(result)
+        # maxValue = 0 
+        # maxIndex = 0
+        # print countR
+        # for index in countR.keys():
+        #     if countR[index] > maxValue:
+        #         maxValue = countR[index]
+        #         maxIndex = index
+        # maxIndex = round(maxIndex, 0)
+        # result = corpus[int(maxIndex)]
+        # print("FAQ #", maxIndex, "\tSimilarity: ", cos_counter[int(maxIndex)])
+        # result.print_all()
     
